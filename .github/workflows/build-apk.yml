@@ -2,11 +2,8 @@ name: Build Cryptify APK
 
 on:
   push:
-    branches:
-      - main
-      - master
-    tags:
-      - 'v*'
+    branches: [ main, master ]
+    tags: [ 'v*' ]
   workflow_dispatch:
 
 jobs:
@@ -30,45 +27,6 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Create capacitor.config.json (if missing)
-        run: |
-          if [ ! -f "capacitor.config.json" ]; then
-            echo '{
-              "appId": "com.yourcompany.cryptify",
-              "appName": "Cryptify",
-              "webDir": ".",
-              "bundledWebRuntime": false,
-              "server": {
-                "androidScheme": "https"
-              },
-              "android": {
-                "allowMixedContent": true,
-                "captureInput": true,
-                "windowSoftInputMode": "adjustResize"
-              }
-            }' > capacitor.config.json
-          fi
-
-      - name: Create package.json (if missing)
-        run: |
-          if [ ! -f "package.json" ]; then
-            echo '{
-              "name": "cryptify_app",
-              "version": "1.0.0",
-              "description": "Cryptify Secure Messenger",
-              "main": "index.html",
-              "scripts": {
-                "build": "npx cap sync android"
-              },
-              "devDependencies": {
-                "@capacitor/cli": "^8.4.1",
-                "@capacitor/core": "^8.4.1"
-              },
-              "author": "",
-              "license": "ISC"
-            }' > package.json
-          fi
 
       - name: Install Dependencies
         run: npm install
