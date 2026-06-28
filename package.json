@@ -1,17 +1,15 @@
 {
   "name": "cryptify_app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Cryptify Secure Messenger",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx cap sync android"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "@capacitor/cli": "^8.4.1",
     "@capacitor/core": "^8.4.1"
-  }
+  },
+  "author": "",
+  "license": "ISC"
 }
