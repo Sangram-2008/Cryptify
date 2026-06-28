@@ -2,9 +2,18 @@ name: Build Cryptify APK
 
 on:
   push:
-    branches: [ main, master ]
-    tags: [ 'v*' ]
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'master'
+        type: string
 
 jobs:
   build:
@@ -13,6 +22,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -27,6 +38,25 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Create capacitor.config.json (if missing)
+        run: |
+          if [ ! -f "capacitor.config.json" ]; then
+            echo '{
+              "appId": "com.sangram.cryptify",
+              "appName": "Cryptify",
+              "webDir": ".",
+              "bundledWebRuntime": false,
+              "server": {
+                "androidScheme": "https"
+              },
+              "android": {
+                "allowMixedContent": true,
+                "captureInput": true,
+                "windowSoftInputMode": "adjustResize"
+              }
+            }' > capacitor.config.json
+          fi
 
       - name: Install Dependencies
         run: npm install
