@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 22   # ✅ FIXED: ab 22 use kar rahe hain
 
       - name: Setup Java
         uses: actions/setup-java@v4
