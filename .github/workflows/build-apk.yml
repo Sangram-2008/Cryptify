@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22   # ✅ FIXED: ab 22 use kar rahe hain
+          node-version: 22
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -31,15 +31,55 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Create capacitor.config.json (if missing)
+        run: |
+          if [ ! -f "capacitor.config.json" ]; then
+            echo '{
+              "appId": "com.yourcompany.cryptify",
+              "appName": "Cryptify",
+              "webDir": ".",
+              "bundledWebRuntime": false,
+              "server": {
+                "androidScheme": "https"
+              },
+              "android": {
+                "allowMixedContent": true,
+                "captureInput": true,
+                "windowSoftInputMode": "adjustResize"
+              }
+            }' > capacitor.config.json
+          fi
+
+      - name: Create package.json (if missing)
+        run: |
+          if [ ! -f "package.json" ]; then
+            echo '{
+              "name": "cryptify_app",
+              "version": "1.0.0",
+              "description": "Cryptify Secure Messenger",
+              "main": "index.html",
+              "scripts": {
+                "build": "npx cap sync android"
+              },
+              "devDependencies": {
+                "@capacitor/cli": "^8.4.1",
+                "@capacitor/core": "^8.4.1",
+                "@capacitor/android": "^8.4.1"
+              },
+              "author": "",
+              "license": "ISC"
+            }' > package.json
+          fi
+
       - name: Install Dependencies
         run: npm install
 
-      - name: Add Android Platform (if missing)
+      - name: Add Android Platform
         run: |
-          if [ ! -d "android" ]; then
-            npx cap add android
-          fi
-          npx cap sync android
+          npx cap add android || true
+
+      - name: Sync Capacitor
+        run: npx cap sync android
 
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
