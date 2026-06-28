@@ -63,8 +63,7 @@ jobs:
               },
               "devDependencies": {
                 "@capacitor/cli": "^8.4.1",
-                "@capacitor/core": "^8.4.1",
-                "@capacitor/android": "^8.4.1"
+                "@capacitor/core": "^8.4.1"
               },
               "author": "",
               "license": "ISC"
@@ -74,9 +73,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Install Android Platform Package
+        run: npm install @capacitor/android
+
       - name: Add Android Platform
-        run: |
-          npx cap add android || true
+        run: npx cap add android
 
       - name: Sync Capacitor
         run: npx cap sync android
